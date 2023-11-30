@@ -73,7 +73,6 @@ require('lazy').setup({
 
   -- Detect tabstop and shiftwidth automatically
   'tpope/vim-sleuth',
-  'windwp/nvim-ts-autotag',
   {
     'windwp/nvim-autopairs',
     event = "InsertEnter",
@@ -276,10 +275,15 @@ vim.o.timeoutlen = 300
 
 -- Set completeopt to have a better completion experience
 vim.o.completeopt = 'menuone,noselect'
-
+vim.opt.tabstop = 2
+vim.opt.softtabstop = 2
+vim.opt.shiftwidth = 2
 -- NOTE: You should make sure your terminal supports this
 vim.o.termguicolors = true
-
+vim.o.swapfile = false
+vim.o.backup = false
+vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
+vim.opt.undofile = true
 -- [[ Basic Keymaps ]]
 
 -- Keymaps for better default experience
@@ -417,6 +421,10 @@ vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next diagnos
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Open floating diagnostic message' })
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostics list' })
 
+vim.diagnostic.config({
+  update_in_insert = true
+})
+
 -- [[ Configure LSP ]]
 --  This function gets run when an LSP connects to a particular buffer.
 local on_attach = function(_, bufnr)
@@ -478,8 +486,6 @@ require('which-key').register {
 -- before setting up the servers.
 require('mason').setup()
 require('mason-lspconfig').setup()
-
-require('nvim-ts-autotag').setup()
 
 -- Enable the following language servers
 --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
